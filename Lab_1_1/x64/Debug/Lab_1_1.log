@@ -1,0 +1,4 @@
+﻿  Lab_1_1.c
+C:\Users\Sergey\source\repos\Lab_1_1\Lab_1_1.c(10,18): warning C4244: =: преобразование "const double" в "float", возможна потеря данных
+C:\Users\Sergey\source\repos\Lab_1_1\Lab_1_1.c(11,28): warning C4244: =: преобразование "const double" в "float", возможна потеря данных
+  Lab_1_1.vcxproj -> C:\Users\Sergey\source\repos\Lab_1_1\x64\Debug\Lab_1_1.exe
