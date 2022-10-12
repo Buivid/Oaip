@@ -1,0 +1,4 @@
+﻿  Source.c
+C:\Users\Sergey\source\repos\Lab_3_1\Source.c(30,9): warning C4244: функция: преобразование "time_t" в "unsigned int", возможна потеря данных
+C:\Users\Sergey\source\repos\Lab_3_1\Source.c(32,28): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+  Lab_3_1.vcxproj -> C:\Users\Sergey\source\repos\Lab_3_1\x64\Debug\Lab_3_1.exe

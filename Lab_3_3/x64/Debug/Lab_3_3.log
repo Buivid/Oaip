@@ -1,0 +1,4 @@
+﻿  Source.c
+C:\Users\Sergey\source\repos\Lab_3_3\Source.c(31,9): warning C4244: функция: преобразование "time_t" в "unsigned int", возможна потеря данных
+C:\Users\Sergey\source\repos\Lab_3_3\Source.c(56,9): warning C4244: функция: преобразование "time_t" в "unsigned int", возможна потеря данных
+  Lab_3_3.vcxproj -> C:\Users\Sergey\source\repos\Lab_3_3\x64\Debug\Lab_3_3.exe

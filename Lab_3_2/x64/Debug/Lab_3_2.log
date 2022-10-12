@@ -1,0 +1,5 @@
+﻿  Source.c
+C:\Users\Sergey\source\repos\Lab_3_2\Source.c(29,9): warning C4244: функция: преобразование "time_t" в "unsigned int", возможна потеря данных
+C:\Users\Sergey\source\repos\Lab_3_2\Source.c(31,28): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+C:\Users\Sergey\source\repos\Lab_3_2\Source.c(55,2): warning C4013: getch: нет определения; предполагается "extern" с возвратом типа "int"
+  Lab_3_2.vcxproj -> C:\Users\Sergey\source\repos\Lab_3_2\x64\Debug\Lab_3_2.exe
