@@ -13,7 +13,7 @@ main()
 	printf("How you would input arrays\n");
 	printf("1.Random input\n");
 	printf("2.Hand input\n");
-	while (scanf_s("%d", &choice) != 1 || choice != 1 && choice != 2)
+	while (scanf_s("%d", &choice) != 1 || choice != 1 && choice != 2|| getchar() != '\n')
 	{
 		printf("Error. Repeat\n");
 		rewind(stdin);
@@ -22,8 +22,8 @@ main()
 	switch (choice)
 	{
 	case 1:
-		printf("Input number of elements in first array\n");
-		while (scanf_s("%d", &n_arr1) != 1 || n_arr1 < 1)
+		printf("Input number of elements in the first array\n");
+		while (scanf_s("%d", &n_arr1) != 1 || n_arr1 < 1|| n_arr1>100|| getchar() != '\n')
 		{
 			printf("Error. Repeat\n");
 			rewind(stdin);
@@ -47,8 +47,8 @@ main()
 
 			}
 		}
-		printf("Input number of elements in second array\n");
-		while (scanf_s("%d", &n_arr2) != 1 || n_arr2 < 1)
+		printf("Input number of elements in the second array\n");
+		while (scanf_s("%d", &n_arr2) != 1 || n_arr2 < 1|| n_arr2>100|| getchar() != '\n')
 		{
 			printf("Error. Repeat");
 			rewind(stdin);
@@ -71,8 +71,8 @@ main()
 		}
 		break;
 	case 2:
-		printf("Input number of elements in first array\n");
-		while (scanf_s("%d", &n_arr1) != 1 || n_arr1 < 1)
+		printf("Input number of elements in the first array\n");
+		while (scanf_s("%d", &n_arr1) != 1 || n_arr1 < 1 || n_arr1>100|| getchar() != '\n')
 		{
 			printf("Error. Repeat\n");
 			rewind(stdin);
@@ -80,14 +80,14 @@ main()
 		printf("Input elements of array\n");
 		for (int i = 0; i < n_arr1; i++)
 		{
-			while (scanf_s("%d", &array1[i]) != 1 || array1[i] <= array1[i - 1])
+			while (scanf_s("%d", &array1[i]) != 1 || array1[i] <= array1[i - 1]|| getchar() != '\n')
 			{
 				printf("Error. Repeat\n");
 				rewind(stdin);
 			}
 		}
-		printf("Input number of elements in second array\n");
-		while (scanf_s("%d", &n_arr2) != 1 || n_arr2 < 1)
+		printf("Input number of elements in the second array\n");
+		while (scanf_s("%d", &n_arr2) != 1 || n_arr2 < 1|| n_arr2>100|| getchar() != '\n')
 		{
 			printf("Error. Repeat\n");
 			rewind(stdin);
@@ -95,7 +95,7 @@ main()
 		printf("Input elements of array\n");
 		for (int i = 0; i < n_arr2; i++)
 		{
-			while (scanf_s("%d", &array2[i]) != 1 || (i>0 && array2[i] >=  array2[i-1]))
+			while (scanf_s("%d", &array2[i]) != 1 || (i>0 && array2[i] >=  array2[i-1])|| getchar() != '\n')
 			{
 				printf("Error. Repeat\n");
 				rewind(stdin);
