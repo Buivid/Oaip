@@ -1,0 +1,4 @@
+﻿  Source.c
+C:\Users\Sergey\source\repos\Lab6_1\Source.c(36,7): warning C4022: free: несоответствие указателя для фактического параметра 1
+C:\Users\Sergey\source\repos\Lab6_1\Source.c(37,7): warning C4022: free: несоответствие указателя для фактического параметра 1
+  Lab_6.vcxproj -> C:\Users\Sergey\source\repos\Lab6_1\x64\Debug\Lab_6.exe

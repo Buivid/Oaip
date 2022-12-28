@@ -1,0 +1,4 @@
+﻿  functions.c
+C:\Users\Sergey\source\repos\Lab5_3\functions.c(32,8): warning C4244: функция: преобразование "time_t" в "unsigned int", возможна потеря данных
+C:\Users\Sergey\source\repos\Lab5_3\functions.c(86,13): warning C4098: check_input: функция типа "void", возвращающая значение
+  Lab5_3.vcxproj -> C:\Users\Sergey\source\repos\Lab5_3\x64\Debug\Lab5_3.exe

@@ -1,0 +1,5 @@
+﻿  Main.c
+C:\Users\Sergey\source\repos\Lab6_2\Main.c(27,21): warning C4047: функция: "int **" отличается по уровням косвенного обращения от "int *"
+C:\Users\Sergey\source\repos\Lab6_2\Main.c(27,14): warning C4024: free_matrix: различные типы для формального и фактического параметров 1
+C:\Users\Sergey\source\repos\Lab6_2\Main.c(36,2): warning C4098: main: функция типа "void", возвращающая значение
+  Lab6_2.vcxproj -> C:\Users\Sergey\source\repos\Lab6_2\x64\Debug\Lab6_2.exe
