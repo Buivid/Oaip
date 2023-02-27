@@ -51,23 +51,6 @@ void correct_choice_delete(int* num, int size)
 	}
 }
 
-int delete(vacuum* array, int k, int* size)
-{
-	if (array != NULL)
-	{
-		for (int i = k; i < (*size) ; i++)
-			array[i-1] = array[i];
-		(*size)--;
-		if (array != NULL)
-		{
-			vacuum *storer = (vacuum*)realloc(array, (*size) * sizeof(vacuum));
-			save("filec.txt", storer, *size);
-		}
-	}
-	//free(storer);
-	return 0;
-}
-
 void delete_menu()
 {
 	int size = count("filec.txt");
@@ -106,21 +89,16 @@ void delete_element(vacuum** mas, int number, int* size)
 		if (storer != NULL)
 		{
 			*mas = storer;
+			save("filec.txt", storer, *size);
 		}
 	}
 }
 
-void sort_one_field(vacuum* array, int size)
+void sort_one_field(vacuum* array, int size, int choice)
 {
-
-	int choice1 = NULL;
-	printf("What criteries\n1.Producer\n2.Status\n3.Price\n");
-	
-	scanf("%d", &choice1);
-
 	for (int i = 0; i < size; i++)
 		for (int j = 0; j < size - 1; j++)
-			if (variant_of_sort(choice1, j, array) == 1)
+			if (variant_of_sort(choice, j, array) == 1)
 			{
 				vacuum storer = array[j];
 				array[j] = array[j + 1];
@@ -128,7 +106,7 @@ void sort_one_field(vacuum* array, int size)
 			}
 }
 
-int variant_of_sort(int field, int counter, vacuum* mas)
+int variant_of_sort(int field, int counter, vacuum const *  mas)
 {
 	if (field == FIRST_FIELD)
 	{
@@ -173,15 +151,14 @@ void view(vacuum* p, int n)
 
 	while (i < n)
 	{
-		char* temp= (char*)calloc(5, sizeof(char));
-		if (p[i].status == OUT)
-			strcpy(temp, "in");
+		int j=NULL;
+		static char* status_name[] = {"in", "out"};
+		if (p[i].status == IN)
+			j = 0;
 		else
-			if (p[i].status == IN)
-				strcpy(temp, "out");
-			else
-				break;
-		printf("| %-16s| %-19s| %-12.3f|\n", p[i].producer, temp, p[i].price);
+			if (p[i].status == OUT)
+				j = 1;
+		printf("| %-16s| %-19s| %-12.2f|\n", p[i].producer, status_name[j], p[i].price);
 		printf("|----------------------------------------------------| \n");
 		i++;
 	}
@@ -198,22 +175,22 @@ void view_menu()
 int add(vacuum* p, int n)
 {
 	char ptr[5];
-	const static char* stat[] = { "in","out" };
-	int j=0;
 	int i = 0;
 	vacuum* temp = (vacuum*)realloc(p, ((n + 1) * sizeof(vacuum)));
-			
+
 	temp = temp + n;
 	temp->producer = (char*)calloc(10, sizeof(char));
 	printf("Input producer:\n");
-	scanf("%s", temp->producer);
+	scanf("%9s", temp->producer);
+
 	printf("Input status:\n");
-	scanf("%s", ptr);
-	if (!strcmp(stat[0], ptr))
-			j = 0;
-	if (!strcmp(stat[1], ptr))
-			j = 1;
-	temp[0].status = j;
+	scanf("%4s", ptr);
+	
+	if (strcmp(ptr, "in") == 0)
+		temp[i].status = IN;
+	else
+		if (strcmp(ptr, "out")==0)
+			temp[i].status = OUT;
 	printf("Input price:\n");
 	scanf("%f", &temp->price);
 	temp = temp - n;
@@ -225,15 +202,14 @@ int add(vacuum* p, int n)
 	return 0;
 }
 
-int add_menu()
+void add_menu()
 {
 	int size = count("filec.txt");
 	vacuum* array = load("filec.txt");
 	add(array, size);
-	return 0;
 }
 
-int save(char* filename, vacuum* p, int n)
+int save(char const * filename, vacuum* p, int n)
 {
 	FILE* fp;
 	if ((fp = fopen(filename, "w")) == NULL)
@@ -258,40 +234,46 @@ int save(char* filename, vacuum* p, int n)
 	return 0;
 }
 
-vacuum* load(char* filename)
+vacuum* load(char const* filename)
 {
 	FILE* fp;
-	int n, i = 0;
+	int n; int i = 0;
 	if ((fp = fopen(filename, "r")) == NULL)
 	{
 		perror("Error occured while opening file");
 		exit(1);
 	}
-	fscanf(fp, "%d\n", &n);
+	while (fscanf(fp, "%d\n", &n) != 1 || n < 0)
+	{ 
+		printf("Error\n");
+		break;
+    }
 	vacuum* temp = (vacuum*)malloc(n * sizeof(vacuum));
 	for(int j=0; j<n; j++)
 		(temp + j)->producer = (char*)malloc(10 * sizeof(char));
 
 	if (!temp)
-		return NULL; // если памяти не хватило.
+		return NULL; 
 	while (i < n) 
 	{
 		char* ptr = (char*)calloc(5, sizeof(char));
+		if (!ptr)
+			return NULL;
+
 		fscanf(fp, "%s%s%f", temp[i].producer, ptr, &temp[i].price);
-		if (strcmp(ptr, "in"))
+		if (strcmp(ptr, "in")==0)
 			temp[i].status = IN;
+
 		else
-			if (strcmp(ptr, "out"))
 				temp[i].status = OUT;
-			else
-				break;
 		i++;
+		free(ptr);
 	}
 	fclose(fp);
 	return temp;
 }
 
-int count(char* filename)
+int count(char const *  filename)
 {
 	FILE* fp;
 	int n;
@@ -300,7 +282,8 @@ int count(char* filename)
 		perror("Error occured while opening file");
 		exit(1);
 	}
-	fscanf(fp, "%d\n", &n);
+	while(fscanf(fp, "%d\n", &n)!=1)
+		printf("Error\n");
 	fclose(fp);
 	return n;
 }
@@ -313,7 +296,12 @@ void sort_one_field_menu()
 	int choice1 = NULL;
 	printf("What criteries\n1.Producer\n2.Status\n3.Price\n");
 
-	scanf("%d", &choice1);
+	while (scanf("%d", &choice1) != 1 || (choice1 < 1 && choice1>3))
+	{
+		printf("Incorrect input\n");
+		rewind(stdin);
+	}
+
 	for (int i = 0; i < size; i++)
 		for (int j = 0; j < size - 1; j++)
 			if (variant_of_sort(choice1, j, array) == 1)
@@ -322,6 +310,7 @@ void sort_one_field_menu()
 				array[j] = array[j + 1];
 				array[j + 1] = storer;
 			}
+
 	view(array, size);
 	for (int i = 0; i < size; i++)
 		free((array + i)->producer);
@@ -344,3 +333,172 @@ int change_need(const char* str1, const char* str2)
 	}
 	return EQUAL;
 }
+
+void sort_by_two_fields_menu()
+{
+	int size = count("filec.txt");
+	vacuum* array = load("filec.txt");
+	int choice1 = NULL; 
+	int choice2 = NULL;
+
+	printf("What first criteries\n1.Producer\n2.Status\n3.Price\n");
+	while (scanf("%d", &choice1) != 1 || (choice1 != 1 && choice1 != 2 && choice1 != 3 )|| getchar() != '\n')
+	{
+		printf("Error!!!");
+		rewind(stdin);
+	}
+
+	printf("What second criteries\n1.Producer\n2.Status\n3.Price\n");
+	while (scanf("%d", &choice2) != 1 || (choice2 != 1 && choice2 != 2 && choice2 != 3) || getchar() != '\n')
+	{
+		printf("Error!!!");
+		rewind(stdin);
+	}
+
+	switch (choice1)
+	{
+	case 1:
+		if (choice2 == 2)
+			by_producer_status(array, size);
+		if (choice2 == 3)
+			by_producer_price(array, size);
+		if (choice2 == 1)
+		{
+			printf("You chose same fields\n");
+			rewind(stdin);
+		}
+		break;
+	case 2:
+		if (choice2 == 1)
+			by_status_producer(array, size);
+		if (choice2 == 3)
+			by_status_price(array, size);
+		if (choice2 == 2)
+		{
+			printf("You chose same fields\n");
+			rewind(stdin);
+		}
+		break;
+	case 3:
+		if (choice2 == 1)
+			by_price_producer(array, size);
+		if (choice2 == 2)
+			by_price_status(array, size);
+		if (choice2 == 3)
+		{
+			printf("You chose same fields\n");
+			rewind(stdin);
+		}
+		break;
+	}
+	view(array, size);
+}
+
+void by_producer_status(vacuum *array, int size)
+{
+	sort_one_field(array, size, 1);
+	for (int i = 0; i < size; i++)
+		for (int j = size-1; j >i; j--)
+		{
+			if (strcmp((array + i)->producer, (array + j)->producer)>0&& variant_of_sort(2, j, array) == 1)
+			{
+					vacuum storer = array[j];
+					array[j] = array[j + 1];
+					array[j + 1] = storer;
+			}
+		}
+}
+
+void by_producer_price(vacuum* array, int size)
+{
+	sort_one_field(array, size, 1);
+	for (int i = 0; i < size; i++)
+		for (int j = 0; j < size - 1; j++)
+		{
+			if (strcmp((array + j)->producer, (array + j + 1)->producer)==0)
+			{
+				if (variant_of_sort(3, j, array) == 1)
+				{
+					vacuum storer = array[j];
+					array[j] = array[j + 1];
+					array[j + 1] = storer;
+				}
+			}
+		}
+}
+
+void by_status_producer(vacuum* array, int size)
+{
+	sort_one_field(array, size, 2);
+	for (int i = 0; i < size; i++) 
+	{
+		for (int j = size-1; j>i; j--)
+		{
+			if (array[i].status == array[j].status && strcmp((array + j - 1)->producer, (array + j)->producer) > 0)
+			{
+
+				vacuum storer = array[j - 1];
+				array[j - 1] = array[j];
+				array[j] = storer;
+			}
+		}
+	}
+}
+
+void by_status_price(vacuum* array, int size)
+{
+	sort_one_field(array, size, 2);
+	for (int i = 0; i < size; i++)
+		for (int j = 0; j < size - 1; j++)
+		{
+			if (array[j].status == array[j + 1].status)
+			{
+				if (variant_of_sort(3, j, array) == 1)
+				{
+					vacuum storer = array[j];
+					array[j] = array[j + 1];
+					array[j + 1] = storer;
+				}
+			}
+			
+		}
+}
+
+ void by_price_producer(vacuum *array, int size)
+ {
+	sort_one_field(array, size, 3);
+	for (int i = 0; i < size; i++)
+		for (int j = size-1; j >i; j--)
+		{
+			if (array[j].price == array[j + 1].price)
+			{
+				if (variant_of_sort(1, j, array) == 1)
+				{
+					vacuum storer = array[j];
+					array[j] = array[j + 1];
+					array[j + 1] = storer;
+				}
+			}
+		}
+ }
+
+void by_price_status(vacuum* array, int size)
+{
+	sort_one_field(array, size, 3);
+	for (int i = 0; i < size; i++)
+		for (int j = 0; j < size - 1; j++)
+		{
+			if (array[j].price == array[j + 1].price)
+			{
+				if (variant_of_sort(2, j, array) == 1)
+				{
+					vacuum storer = array[j];
+					array[j] = array[j + 1];
+					array[j + 1] = storer;
+				}
+			}
+			else
+				break;
+		}
+}
+
