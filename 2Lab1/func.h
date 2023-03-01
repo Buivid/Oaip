@@ -1,5 +1,5 @@
 #pragma once
-typedef enum st{ IN, OUT };
+typedef enum st{ WIRED, WIRELESS };
 typedef struct
 {
 	char* producer;

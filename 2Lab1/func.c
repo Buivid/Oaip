@@ -146,17 +146,17 @@ void view(vacuum* p, int n)
 
 	int i = 0;
 	printf(".----------------------------------------------------. \n");
-	printf("|     Producer    |       Status       |    Price    | \n");
+	printf("|     Producer    |        Wire        |    Price    | \n");
 	printf("|----------------------------------------------------| \n");
 
 	while (i < n)
 	{
 		int j=NULL;
-		static char* status_name[] = {"in", "out"};
-		if (p[i].status == IN)
+		static char* status_name[] = {"wired", "wireless"};
+		if (p[i].status == WIRED)
 			j = 0;
 		else
-			if (p[i].status == OUT)
+			if (p[i].status == WIRELESS)
 				j = 1;
 		printf("| %-16s| %-19s| %-12.2f|\n", p[i].producer, status_name[j], p[i].price);
 		printf("|----------------------------------------------------| \n");
@@ -174,7 +174,7 @@ void view_menu()
 
 int add(vacuum* p, int n)
 {
-	char ptr[5];
+	char ptr[10];
 	int i = 0;
 	vacuum* temp = (vacuum*)realloc(p, ((n + 1) * sizeof(vacuum)));
 
@@ -183,19 +183,19 @@ int add(vacuum* p, int n)
 	printf("Input producer:\n");
 	scanf("%9s", temp->producer);
 
-	printf("Input status:\n");
+	printf("Input wire/wireless:\n");
 	scanf("%4s", ptr);
 	
-	if (strcmp(ptr, "in") == 0)
-		temp[i].status = IN;
+	if (strcmp(ptr, "wired") == 0)
+		temp[i].status = WIRED;
 	else
-		if (strcmp(ptr, "out")==0)
-			temp[i].status = OUT;
+		if (strcmp(ptr, "wireless")==0)
+			temp[i].status = WIRELESS;
 	printf("Input price:\n");
 	scanf("%f", &temp->price);
 	temp = temp - n;
 	save("filec.txt", temp, (n + 1));
-	printf("Zapis dobavlena:\n");
+	printf("Vacuum cleaner was added:\n");
 	for (int i = 0; i <= n; i++)
 		free((temp + i)->producer);
 	free(temp);
@@ -221,12 +221,12 @@ int save(char const * filename, vacuum* p, int n)
 	int i = 0;
 	while (i < n) 
 	{
-		char temp[4];
+		char temp[10];
 
-		if (p[i].status == IN)
-			strcpy(temp, "in");
-		if (p[i].status == OUT)
-			strcpy(temp, "out");
+		if (p[i].status == WIRED)
+			strcpy(temp, "wired");
+		if (p[i].status == WIRELESS)
+			strcpy(temp, "wireless");
 		fprintf(fp, "%s %s %.3f\n", p[i].producer, temp, p[i].price);
 		i++;
 	}
@@ -243,11 +243,8 @@ vacuum* load(char const* filename)
 		perror("Error occured while opening file");
 		exit(1);
 	}
-	while (fscanf(fp, "%d\n", &n) != 1 || n < 0)
-	{ 
-		printf("Error\n");
-		break;
-    }
+	fscanf(fp, "%d\n", &n);
+	
 	vacuum* temp = (vacuum*)malloc(n * sizeof(vacuum));
 	for(int j=0; j<n; j++)
 		(temp + j)->producer = (char*)malloc(10 * sizeof(char));
@@ -256,16 +253,16 @@ vacuum* load(char const* filename)
 		return NULL; 
 	while (i < n) 
 	{
-		char* ptr = (char*)calloc(5, sizeof(char));
+		char* ptr = (char*)calloc(10, sizeof(char));
 		if (!ptr)
 			return NULL;
 
 		fscanf(fp, "%s%s%f", temp[i].producer, ptr, &temp[i].price);
-		if (strcmp(ptr, "in")==0)
-			temp[i].status = IN;
+		if (strcmp(ptr, "wired")==0)
+			temp[i].status = WIRED;
 
 		else
-				temp[i].status = OUT;
+				temp[i].status = WIRELESS;
 		i++;
 		free(ptr);
 	}
@@ -390,6 +387,9 @@ void sort_by_two_fields_menu()
 			rewind(stdin);
 		}
 		break;
+	default:
+		printf("Catalog is not sorted");
+		break;
 	}
 	view(array, size);
 }
@@ -400,11 +400,11 @@ void by_producer_status(vacuum *array, int size)
 	for (int i = 0; i < size; i++)
 		for (int j = size-1; j >i; j--)
 		{
-			if (strcmp((array + i)->producer, (array + j)->producer)>0&& variant_of_sort(2, j, array) == 1)
+			if (strcmp((array + i)->producer, (array + j)->producer) ==0 && array[j-1].status > array[j].status)
 			{
-					vacuum storer = array[j];
-					array[j] = array[j + 1];
-					array[j + 1] = storer;
+				vacuum storer = array[j - 1];
+				array[j - 1] = array[j];
+				array[j] = storer;
 			}
 		}
 }
