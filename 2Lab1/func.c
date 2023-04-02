@@ -28,7 +28,7 @@ void menu_correct(int* task)
 {
 	while ((scanf_s("%d", task)) != 1 || *task < 1 || *task>6 || getchar() != '\n')
 	{
-		printf("Make right choiñe(1-5):");
+		printf("Make right choiÃ±e(1-5):");
 		rewind(stdin);
 	}
 }
@@ -196,8 +196,8 @@ int add(vacuum* p, int n)
 	temp = temp - n;
 	save("filec.txt", temp, (n + 1));
 	printf("Vacuum cleaner was added:\n");
-	for (int i = 0; i <= n; i++)
-		free((temp + i)->producer);
+	for (int  j = 0; j <= n; j++)
+		free((temp + j)->producer);
 	free(temp);
 	return 0;
 }
