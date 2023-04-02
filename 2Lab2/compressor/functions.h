@@ -31,7 +31,6 @@ typedef struct glossary
 }glossary;
 
 node* check_word(node** head, char* str);
-//char* file_read(char const file[]);
 void add_word(string *str, node** head);
 void func(char* file_name, node** head);
 void push(node** head, string *str);
@@ -40,7 +39,6 @@ void show_stack(node* head);
 void replace_words(node** head, const char* file_name, string** text);
 WORD pop(node** head);
 int profit(node* head, WORD word);
-glossary* add(glossary* p, int n, WORD big_word, WORD small_word);
 void add_to_text(string** text, char* word);
 void swap_words(string** text, glossary* word);
 void create_new_file(glossary* book, int size, const char* file_name, string** text);
