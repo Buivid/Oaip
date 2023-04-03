@@ -3,7 +3,6 @@
 #include<stdlib.h>
 #include<string.h>
 #include"functions.h"
-#include<locale.h>
 
 
 void push(node** head, string* data)
@@ -62,20 +61,20 @@ void func(const char* file_name, node** head)
     string* split_text = (string*)calloc(1, sizeof(string));
     split_text->len = 0;
     split_text->str = NULL;
-    char* str = (char*)calloc(1024, sizeof(char));
+    char* str = (char*)calloc(2000, sizeof(char));
 
     if ((f = fopen(file_name, "r")) == NULL)
         exit(1);
     
     fseek(f, 0, SEEK_END);
-    printf("Original file - %lld bytes\n", ftell(f));
+    printf("Original file - %ld bytes\n", ftell(f));
     fseek(f, 0, SEEK_SET);
-
-    while (!feof(f))
+    fgets(str, 2000, f);
+    do
     {
-        fgets(str, 1024, f);
         str_tok(str, " ", head, &split_text);
-    }
+        fgets(str, 2000, f);
+    } while (!feof(f));
     free(str);
     fclose(f);
     replace_words(head, file_name, &split_text);
@@ -99,7 +98,6 @@ void str_tok(char* str1, const char* str2, node** head, string** text)
            znak.str = (char*)calloc(znak.len, sizeof(char));              
            znak.str[0] = str1[i];             
            add_to_text(text, znak.str);
-           printf("22 %c", znak.str[0]);
        }
        if ((str1[i] < 'A' || str1[i] > 'z') && (str1[i + 1] >= 'A' && str1[i + 1] <= 'z'))
        {
@@ -183,7 +181,7 @@ void replace_words(node** head, const char *file_name, string** text)
         else
             pop(head);
     }
-    create_new_file(book, size, file_name, text);
+    create_new_file(book, size, text);
 }
 
 WORD pop(node** head)
@@ -213,25 +211,22 @@ int profit(node* head, WORD word)
     small.word.str = head->word;
     small.count = head->count;
     profit = (big.count * big.word.len + small.count * small.word.len) - (big.count * small.word.len + small.count * big.word.len + big.word.len + small.word.len + 2);
-    if (profit <= 0)
+    if (profit <= 4)
         return -1;
     else
         return profit;  
 }
 
-void create_new_file(glossary* book, int size, const char* file_name, string** text)
+void create_new_file(glossary* book, int size, string** text)
 {
-    FILE* file;
+  
     FILE* file_compressed;
-    WORD word;
-    char* p;
-    char* buffer = (char*)calloc(1024, sizeof(char));
-    if ((file = fopen(file_name, "r+")) == NULL)
-        exit(1);
+    int file_size;
+   
     if ((file_compressed = fopen("Compressed.txt", "w+")) == NULL)
         exit(1);
     fseek(file_compressed, 0, SEEK_SET);
-    fseek(file, 0, SEEK_SET);
+   
     for (int i = 0; i < size; i++)
     {
         fputs(book[i].big.word.str, file_compressed);
@@ -239,7 +234,7 @@ void create_new_file(glossary* book, int size, const char* file_name, string** t
         fputs(book[i].small.word.str, file_compressed);
         fputs("\n", file_compressed);
     }
-    fputs("\0", file_compressed);
+    fputs("|\n", file_compressed);
     for (int i = 0; i < size; i++)
     {
         swap_words(text, (book+i));
@@ -248,8 +243,9 @@ void create_new_file(glossary* book, int size, const char* file_name, string** t
     {
         fputs((*text)->str[i], file_compressed);
     }
-    printf("Compression file - %lld bytes", ftell(file_compressed));
-    fclose(file);
+    file_size = ftell(file_compressed);
+    printf("Compression file - %d bytes", file_size);
+    free(*text);
     fclose(file_compressed);
 }
 

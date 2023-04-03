@@ -1,12 +1,11 @@
 #define _CRT_SECURE_NO_WARNINGS
 
-#include"functions.h"
+#include"func_decompress.h"
 
 int main()
 {
     system("color 0A");
-    node *head = NULL;
     system("cls");
-    func("ROM.txt", &head);
+    func("../2Lab2/Compressed.txt");
     return 0;
 }

@@ -1,7 +1,6 @@
 #pragma once
 #include<stdio.h>
 #include<stdlib.h>
-#include<locale.h>
 
 typedef struct node
 {
@@ -41,6 +40,6 @@ WORD pop(node** head);
 int profit(node* head, WORD word);
 void add_to_text(string** text, char* word);
 void swap_words(string** text, glossary* word);
-void create_new_file(glossary* book, int size, const char* file_name, string** text);
+void create_new_file(glossary* book, int size, string** text);
 int size_word(char* p);
 void loading_bar();
