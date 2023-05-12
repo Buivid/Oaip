@@ -1,0 +1,5 @@
+C:/Users/Sergey/Documents/GitHub/out/build/x64-Debug/CMakeFiles/2Lab1.dir
+C:/Users/Sergey/Documents/GitHub/out/build/x64-Debug/CMakeFiles/2Lab2.dir
+C:/Users/Sergey/Documents/GitHub/out/build/x64-Debug/CMakeFiles/2Lab2_dec.dir
+C:/Users/Sergey/Documents/GitHub/out/build/x64-Debug/CMakeFiles/edit_cache.dir
+C:/Users/Sergey/Documents/GitHub/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir
